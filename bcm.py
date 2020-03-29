@@ -43,7 +43,7 @@ else:
 
 output = commands.getstatusoutput(shellfile_to_call)
 if output[0] != 0:
-    print 'Error in compiling bcm library: %s' % (output[1])
+    print('Error in compiling bcm library: %s' % (output[1]))
     sys.exit(1)
 lib = cdll.LoadLibrary(library_to_load)
 
@@ -252,7 +252,7 @@ class iBCM():
         self.S = S
         self.F = F
         if len(FG) != self.F:
-            print 'number of feature values for each feature should be given as a list'
+            print('number of feature values for each feature should be given as a list')
             sys.exit(1)
 
         # this should be a list of numbers for each feature
@@ -298,13 +298,13 @@ class iBCM():
 
         if len(feature_dictionary) > 0:
             if len(feature_dictionary.keys()) != self.F:
-                print 'feature_dictionary keys (%s) must be the same length with the number of features (%s)' % (len(feature_dictionary.keys()), self.F)
+                print('feature_dictionary keys (%s) must be the same length with the number of features (%s)' % (len(feature_dictionary.keys()), self.F))
 
                 sys.exit(1)
 
             if len(feature_value_dictionary) > 0 and [ len( feature_value_dictionary[ feature_dictionary[f] ] ) for f in xrange(self.F) ] \
                     != self.FG:
-                print 'feature_value_dictionary keys must be the same length with the number of feature values for each feature'
+                print('feature_value_dictionary keys must be the same length with the number of feature values for each feature')
             self.feature_dictionary_inv = {
                 feature_dictionary[key]: key for key in feature_dictionary.keys()}
 
@@ -342,7 +342,7 @@ class iBCM():
 
         if self.DEBUGGING:
             if self.is_verbose:
-                print 'Generating simulation data...'
+                print('Generating simulation data...')
             self._generate_sim_data()
 
         self.is_saving_pickle = is_saving_pickle
@@ -404,7 +404,7 @@ class iBCM():
             # or any([self.FG[f] < self.S for f in xrange(self.F)] ):
             if self.S > self.N:
                 # TODO: is this still needed?
-                print 'When debugging mode, the number of data should be bigger than the number of subspace'
+                print('When debugging mode, the number of data should be bigger than the number of subspace')
                 sys.exit(1)
             if True:
                 self.data_for_debugging = util.get_data_for_debugging(
@@ -412,7 +412,7 @@ class iBCM():
                     self.FG,
                     self.F)
                 if self.is_verbose:
-                    print 'Printing data_for_debugging :%s' % (self.data_for_debugging)
+                    print('Printing data_for_debugging :%s' % (self.data_for_debugging))
 
         for s in xrange(self.S):
             self.w_true[s] = [
@@ -458,8 +458,8 @@ class iBCM():
                 self.p_true_val[s] = self.data_for_debugging[s]
                 self.p_true_index[s] = s
                 if self.is_verbose:
-                    print 'p_true_val %s' % (self.p_true_val[s])
-                    print 'w_true %s' % (self.w_true[s])
+                    print('p_true_val %s' % (self.p_true_val[s]))
+                    print('w_true %s' % (self.w_true[s]))
             for f in xrange(self.F):
                 ''' normalize phi '''
                 alval = zeros(self.FG[f], dtype=c_double)
@@ -536,7 +536,7 @@ class iBCM():
          and update the counting variables for inference (nfg and nd).
         '''
         if not isinstance(addNoiseVar, list):
-            print 'the third input to initializeVariables should be list of strings of variables'
+            print('the third input to initializeVariables should be list of strings of variables')
             sys.exit(1)
 
         if self.DEBUGGING == True:
@@ -548,13 +548,13 @@ class iBCM():
         if isinstance(data, cData) and len(
                 data.x) > 0:  # working with real data
             if len(data.z_true) == 0 and 'z' in addNoiseVar:
-                print 'z_true does not exist! cannot add noise to z'
+                print('z_true does not exist! cannot add noise to z')
                 sys.exit(1)
             if len(data.w_true) == 0 and 'w' in addNoiseVar:
-                print 'w_true does not exist! cannot add noise to w'
+                print('w_true does not exist! cannot add noise to w')
                 sys.exit(1)
             if len(data.p_true_val) == 0 and 'p' in addNoiseVar:
-                print 'p_true does not exist! cannot add noise to p'
+                print('p_true does not exist! cannot add noise to p')
                 sys.exit(1)
             if len(data.z_true) > 0:
                 self.z_true = array(data.z_true, dtype=int32)
@@ -599,7 +599,7 @@ class iBCM():
                 changeRows = array(
                     [1 if i % FREQ_BADSTART == 0 else 0 for i in xrange(self.N)]).nonzero()[0]
                 if self.is_verbose:
-                    print 'Adding noise to z. Every %s is noise ' % (FREQ_BADSTART)
+                    print('Adding noise to z. Every %s is noise ' % (FREQ_BADSTART))
                 self.z[changeRows] = [
                     [
                         random.randint(
@@ -641,7 +641,7 @@ class iBCM():
                 phi[s][f] = (array(nfg[f][s]) + al) / \
                     (float(sum(nfg[f][s])) + sum(array(al)))
                 if (sum(phi[s][f]) - 1) > 1e-10:
-                    print 'compute phi error: sum of phi[s][f] needs to be 1'
+                    print('compute phi error: sum of phi[s][f] needs to be 1')
                     sys.exit()
         return array(phi)
 
@@ -685,15 +685,15 @@ class iBCM():
             data = self.x
         self._calculate_likelihood()
         if self.is_verbose:
-            print 'initializing variables'
+            print('initializing variables')
         self._initializeVariables(data, addnoiseVars)
         if self.is_verbose:
-            print 'DONE initializing variables'
+            print('DONE initializing variables')
 
         if not is_running_remotely and self.is_visualize:
             self.fig.show()
             if self.is_verbose:
-                print 'showing figure'
+                print('showing figure')
 
         if self.is_saving_pickle:
             pickle.dump(self.x, self.picklefile)
@@ -708,7 +708,7 @@ class iBCM():
                       self.visualize(accs, i)
                 self.write_prototypes(i)
                 if self.is_verbose:
-                    print '. iteration %s .' % (i)
+                    print('. iteration %s .' % (i))
                 self.sampleP()
                 self.sampleW()
                 self.sampleZ()
@@ -724,12 +724,12 @@ class iBCM():
             # side. It's faster.
             self._make_all_nparray()
             if self.is_verbose:
-                print 'sampling all iterations from the cpp library... (nothing will print until done)'
+                print('sampling all iterations from the cpp library... (nothing will print until done)')
             lib.sample_all_iterations(self.N, self.S, self.F, self.nd, self.alpha,
                                       self.nfg, self.p_val, self.p_index, self.w, self.lamb_scalar, self.PEAKSIZE, self.FG,
                                       self.x, self.z, self.G0, self.q, self.ITERATION, self.z_scores, self.p_scores, self.w_scores, SEED)
             if self.is_verbose:
-                print 'done sampling %s times' % (self.ITERATION)
+                print('done sampling %s times' % (self.ITERATION))
             self.print_save_acc(-1)
         self.accfile.close()
         self.protofile.close()
@@ -820,7 +820,7 @@ class iBCM():
                                '\n')
 
             if self.is_verbose:
-                print '--Accuracy-- p: %.3f w: %.3f phi: %.3f z: %.2f likelihood: %.2f' % (pacc, wsacc, phiacc, zacc, self.likelihood)
+                print('--Accuracy-- p: %.3f w: %.3f phi: %.3f z: %.2f likelihood: %.2f' % (pacc, wsacc, phiacc, zacc, self.likelihood))
             return {'w': wsacc, 'phi': phiacc, 'p': pacc, 'z': zacc}
 
         elif self._z_true_exist():
@@ -833,7 +833,7 @@ class iBCM():
                                    (self.likelihood)) +
                                '\n')
             if self.is_verbose:
-                print '--Accuracy-- z: %.2f likelihood: %.2f' % (zacc, self.likelihood)
+                print('--Accuracy-- z: %.2f likelihood: %.2f' % (zacc, self.likelihood))
             return {'w': '', 'phi': '', 'p': '', 'z': zacc}
         else:
             if len(set(self.z_true_per_data)) > 2:
@@ -845,7 +845,7 @@ class iBCM():
                     self.z_true_per_data,
                     self.F)
                 if self.is_verbose:
-                    print '--Accuracy-- acc:%.2f likelihood: %.2f' % (acc, self.likelihood)
+                    print('--Accuracy-- acc:%.2f likelihood: %.2f' % (acc, self.likelihood))
                 self.accfile.write('unsuper ' +
                                    str('%.3f' %
                                        (acc)) +
