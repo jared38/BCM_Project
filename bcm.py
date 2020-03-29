@@ -38,7 +38,7 @@ elif 'Darwin' in platform.system():
     shellfile_to_call = './compile_bcm_sharelib.sh'
     library_to_load = './libbcm.dylib'
 else:
-    print 'Sorry, your OS is not supported.'
+    print('Sorry, your OS is not supported.')
     sys.exit(1)
 
 output = commands.getstatusoutput(shellfile_to_call)
